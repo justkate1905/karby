@@ -66,13 +66,12 @@ int main(int argc, char **argv)
 					//f = ((int)(opcodes.at(i+1))|0)&&0xFFFF;
 					s = ((int)(opcodes.at(i+1))); 
 					//s = 0x00000062;// && 0xFFFF;
-					//cout << "hello"<<endl;
 					cout<< s <<' ' << 16<<endl;
 					break;
 				case 0x00C8:
 					cout<<opcodes.at((int)(opcodes.at(i+1))/sizeof(int)+2)<<endl;
 					break;
-				//Îïåðàöèÿ ñëîæåíèÿ	
+				//ÐžÐ¿ÐµÑ€Ð°Ñ†Ð¸Ñ ÑÐ»Ð¾Ð¶ÐµÐ½Ð¸Ñ	
 				case 0x1000:
 					op1 = opcodes.at((int)(opcodes.at(i+1))/sizeof(int)+2);
 					op2 = opcodes.at((int)(opcodes.at(i+2))/sizeof(int)+2);
@@ -127,7 +126,7 @@ int main(int argc, char **argv)
 					math_stack.push_back(op1+op2);
 					i+=2;
 					break;
-				//Îïåðàöèÿ âû÷èòàíèÿ 
+				//ÐžÐ¿ÐµÑ€Ð°Ñ†Ð¸Ñ Ð²Ñ‹Ñ‡Ð¸Ñ‚Ð°Ð½Ð¸Ñ 
 				case 0x1004:
 					op1 = opcodes.at((int)(opcodes.at(i+1))/sizeof(int)+2);
 					op2 = opcodes.at((int)(opcodes.at(i+2))/sizeof(int)+2);
@@ -182,7 +181,7 @@ int main(int argc, char **argv)
 					math_stack.push_back(op1-op2);
 					i+=2;
 					break;
-				//îïåðàöèÿ óìíîæåíèÿ	
+				//Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ñ ÑƒÐ¼Ð½Ð¾Ð¶ÐµÐ½Ð¸Ñ	
 				case 0x1008:
 					op1 = opcodes.at((int)(opcodes.at(i+1))/sizeof(int)+2);
 					op2 = opcodes.at((int)(opcodes.at(i+2))/sizeof(int)+2);
@@ -237,7 +236,7 @@ int main(int argc, char **argv)
 					math_stack.push_back(op1*op2);
 					i+=2;
 					break;
-				//Îïåðàöèÿ äåëåíèÿ
+				//ÐžÐ¿ÐµÑ€Ð°Ñ†Ð¸Ñ Ð´ÐµÐ»ÐµÐ½Ð¸Ñ
 				case 0x100C:
 					op1 = opcodes.at((int)(opcodes.at(i+1))/sizeof(int)+2);
 					op2 = opcodes.at((int)(opcodes.at(i+2))/sizeof(int)+2);
