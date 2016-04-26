@@ -64,9 +64,9 @@ int main(int argc, char **argv)
 					break;
 				case 0x00CA:
 					//f = ((int)(opcodes.at(i+1))|0)&&0xFFFF;
-					s = ((int)(opcodes.at(i+1))); 
+					//s = ((int)(opcodes.at(i+1))); 
 					//s = 0x00000062;// && 0xFFFF;
-					cout<< s <<' ' << 16<<endl;
+					//cout<< s <<' ' << 16<<endl;
 					break;
 				case 0x00C8:
 					cout<<opcodes.at((int)(opcodes.at(i+1))/sizeof(int)+2)<<endl;
