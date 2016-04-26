@@ -1,19 +1,33 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <boost/locale/encoding_utf.hpp>
 #define size_opcode int
+using boost::locale::conv::utf_to_utf;
 using namespace std;
+std::wstring utf8_to_wstring(const std::string& str)
+	{
+		return utf_to_utf<wchar_t>(str.c_str(), str.c_str() + str.size());
+	}
+
+std::string wstring_to_utf8(const std::wstring& str)
+	{
+	return utf_to_utf<char>(str.c_str(), str.c_str() + str.size());
+	}
 int main(int argc, char **argv)
 {
+		setlocale(0,"");
 		FILE *file;
 		char* name = " ";
 		vector<double> opcodes;
 		int buff[1];
-		int size, addr_reg1, addr_reg2;
-		short int s;
-		char f;
+		int size, addr_reg1, addr_reg2, symb_number, max;
 		double op1, op2;
+		string utf;
+		wstring wide_str;
+		wchar_t ch;
 		vector<double> math_stack;
+		wstring::iterator beg, end;
 		if(argc==1){
 			cout<<"There's no filename"<<endl;
 			}
@@ -36,7 +50,7 @@ int main(int argc, char **argv)
 		}
 		fclose(file);
 		for(int i =0; i<opcodes.size(); i++){
-			cout<<hex<<opcodes.at(i)<<endl;
+			//cout<<hex<<opcodes.at(i)<<endl;
 			}
 		for(int i =0; i<opcodes.size(); i++){
 			p=(int)(opcodes.at(i));
@@ -56,17 +70,40 @@ int main(int argc, char **argv)
 				case 0x00AC:
 					break;
 				case 0x00AF:
-					break;
+	
+				break;
 				case 0x00B0:
 					break;
 				case 0x00C9:
 					cout<<opcodes.at(i+1)<<endl;
 					break;
 				case 0x00CA:
-					//f = ((int)(opcodes.at(i+1))|0)&&0xFFFF;
-					//s = ((int)(opcodes.at(i+1))); 
-					//s = 0x00000062;// && 0xFFFF;
-					//cout<< s <<' ' << 16<<endl;
+					symb_number = (int)(opcodes.at(i+1));
+					max = symb_number/2 + symb_number%2;
+					i+=2;
+					for(int j = 0; j<max; j++){
+						ch = (short int)((int)(opcodes.at(i+j))>>16);
+						wide_str+=ch;
+						ch = (short int)((int)(opcodes.at(i+j))&0xFFFF);
+						if(!(max-j==1)){
+							wide_str+=ch;						
+							}
+						}
+					
+					beg = wide_str.begin();
+					end = wide_str.end();
+					//while(beg!=end){
+					wcout<<wide_str<<endl;
+						//beg++;
+					//}
+					utf = wstring_to_utf8(wide_str);
+					wide_str = L"";
+					//cout<<utf<<endl;
+					i+=max-1;
+					//if(symb_number%2==1){
+						//i++;
+						//}
+					
 					break;
 				case 0x00C8:
 					cout<<opcodes.at((int)(opcodes.at(i+1))/sizeof(int)+2)<<endl;
