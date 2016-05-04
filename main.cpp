@@ -159,7 +159,17 @@ int main(int argc, char **argv)
 					i++;
 					break;
 				case 0x01B5:
-					vals = opcodes.at((int)(opcodes.at(i+1))/sizeof(int)+2);
+					vals = (opcodes.at(i+1));
+					if((((int)(vals))&0xFFFF0) == 0x188A0){
+						//cout << "return "<<vals<<endl;
+						given_param = vals - 0x188A0;
+						index = param_num-given_param+1;
+						//cout<<"return_params: "<<index<<endl;
+						vals = func_params.at(func_params.size()-index);
+					}
+					else{
+						vals = opcodes.at((int)(opcodes.at(i+1))/sizeof(int)+2);
+					}
 					func_params.push_back(vals);
 					i++;
 					//cout<<"return value "<<func_params.back()<<endl;
@@ -304,7 +314,7 @@ int main(int argc, char **argv)
 					if((((int)(op1))&0xFFFF0) == 0x188A0){
 						given_param = ((int)(op1))-0x188A0;
 						index = param_num-given_param+1;
-						cout<<"given_params: "<<index<<endl;
+						//cout<<"given_params: "<<index<<endl;
 						op1 = func_params.at(func_params.size()-index);
 						//cout<<"~ "<<op1<<endl;
 						if((((int)(op2)) & 0xFFFF0) == 0x188A0){
@@ -419,6 +429,7 @@ int main(int argc, char **argv)
 							index = param_num-given_param+1;
 							//cout<<"index: "<<index<<endl;
 							op2 = func_params.at(func_params.size()-index);
+							//cout<<"hello "<<op2<<endl;
 						}
 						else{
 							op2 = opcodes.at((int)(opcodes.at(i+2))/sizeof(int)+2);
@@ -445,7 +456,7 @@ int main(int argc, char **argv)
 					op2 = opcodes.at(i+2);
 					if((((int)(op1))&0xFFFF0) == 0x188A0){
 						given_param = ((int)(op1))-0x188A0;
-						cout<<"given_params: "<<given_param<<endl;
+						//cout<<"given_params: "<<given_param<<endl;
 						index = param_num-given_param+1;
 						op1 = func_params.at(func_params.size()-index);
 					}
@@ -615,15 +626,17 @@ int main(int argc, char **argv)
 					i+=2;
 					break;
 				case 0x3000:
+					op1 = opcodes.at(opcodes.at(i+2)/sizeof(int)+2);
+					//cout<<"assoc  var "<<op1<<endl;
 					opcodes.at(opcodes.at(i+1)/sizeof(int)+2) = opcodes.at(opcodes.at(i+2)/sizeof(int)+2);
 					i+=2;
 					break;
 				case 0x3001:
-					//cout<<dec<<"~~~~"<<math_stack.back()<<"~~~~~"<<endl;
 					op1 =  opcodes.at(i+2);
 					switch((int)(op1)){
 						case 0x00AA:
 							op1 = math_stack.back();
+							//cout<<"assoc stack "<<op1<<endl;
 							math_stack.pop_back();
 						break;
 						case 0x01B7:
@@ -632,6 +645,7 @@ int main(int argc, char **argv)
 							}
 							else{
 								op1 = func_params.back();
+								//scout<<"assoc "<<op1<<endl;
 								func_params.pop_back();
 							}
 						break;
